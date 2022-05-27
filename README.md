@@ -4,9 +4,7 @@ This report will document the approach to create a full stack web application fo
 
 ![screenshot of gh pr status](https://user-images.githubusercontent.com/98482/84171218-327e7a80-aa40-11ea-8cd1-5177fc2d0e72.png)
 
-GitHub CLI is available for repositories hosted on GitHub.com and GitHub Enterprise Server 2.20+, and to install on macOS, Windows, and Linux.
-
-## Documentation
+## Architecture overview
 
 [See the manual][manual] for setup and usage instructions.
 
