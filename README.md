@@ -10,8 +10,6 @@ Angular app contains templates which render the single page web displaying to cl
 
 Spring Boot app contains the controller which routes to a desired function based on given URI path. Spring data JPA defines repository interfaces which simply performs CRUD operation, sorting, and pagination on MYSQL database 
 
-[See the manual][manual] for setup and usage instructions
-
 ## Technology and versioning
 
 | Front-end         | Back-end                   |
@@ -23,7 +21,7 @@ Spring Boot app contains the controller which routes to a desired function based
 | VSCode 1.6+       | MySQL Database (Workbench) |
 | BootStrap 4       | Eclipse STS 4.4+           |
 
-## Steps and Approach
+## Setup
 
 ### Initialize Spring Starter project in Eclipse STS
 
@@ -31,6 +29,7 @@ Add necessary dependencies like below:
 ![spring-dependencies](https://user-images.githubusercontent.com/78957509/170806195-f2af2f73-a2fe-4bb4-8b53-914244503a16.PNG)
 
 ### Configure MYSQL database in application.properties
+In order to connect Spring Boot app to our local mySQL database, we need to configure like below:
 ```
 spring.datasource.url = jdbc:mysql://{your_mysql_url}/employee_mangement_system?useSSL=false
 spring.datasource.username=root
@@ -40,8 +39,10 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDial
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-### Create JPA Entity
-Create a package named "model" under src/main/java. Under model package, create a new Employee class like below:
+## development instructions
+
+### Create JPA Entity (Employee.java)
+Employee is an entity which will be persisted in MYSQL database. Create a package named "model" under src/main/java. Under model package, create a new Employee model class like below:
 ##### 1) Create model class with setters, getters, and constructors
 ##### 2) Annotate @Entity and @Table with name of the table to map into database
 ##### 3) Annotate @Id for primary key and specify @Column name 
@@ -118,25 +119,90 @@ public class Employee {
 }
 ```
 
-#### MacPorts
+### Create JPA Repository (employeeRepository.java)
+JPA repository helps handling CRUD+L operations on MySQL database without us writing any SQL statement. 
 
-| Install:               | Upgrade:                                       |
-| ---------------------- | ---------------------------------------------- |
-| `sudo port install gh` | `sudo port selfupdate && sudo port upgrade gh` |
+##### 1) Create EmployeeRepository class which extends JPA repository Interface of <model, primary key type>
+##### 2) Annotate @Repository
 
-#### Conda
+```
+package com.example.demo.repository;
 
-| Install:                                 | Upgrade:                                |
-|------------------------------------------|-----------------------------------------|
-| `conda install gh --channel conda-forge` | `conda update gh --channel conda-forge` |
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-Additional Conda installation options available on the [gh-feedstock page](https://github.com/conda-forge/gh-feedstock#installing-gh).
+import com.example.demo.model.Employee;
 
-#### Spack
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Long>{
+	
+}
 
-| Install:           | Upgrade:                                 |
-| ------------------ | ---------------------------------------- |
-| `spack install gh` | `spack uninstall gh && spack install gh` |
+```
+
+### Create custom exception (Resourcenotfoundexception.java)
+This will handle bad request from client
+##### 1) Create custom exception constructor and call super() method
+##### 2) Annotate @ResponseStatus to specify HTTP status of the exception
+##### 3) RuntimeException implements serializable interface so we need to define serial version
+
+```
+package com.example.demo.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class ResourceNotFoundException extends RuntimeException {
+	
+	private static final long serialVersionUID = 1L;
+	
+	public ResourceNotFoundException(String message) {
+		super(message);
+	}
+}
+```
+
+### Create Rest Controller - Spring (EmployeeController.java)
+
+##### 1) Annotate @RestController and @RequestMapping (endpoint of the main controller)
+##### 2) Autowired repository entity
+##### 3) If Angular request end point matches with @GetMapping path, getAllEmployees method will be performed
+##### 4) Simply use employee_repo instance to call findAll() method.
+
+Note: @CrossOrigin() annotation is for connecting to Angular server later on
+
+```
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.model.Employee;
+import com.example.demo.repository.EmployeeRepository;
+
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
+@RequestMapping("/api/v1/")
+public class EmployeeController {
+	
+	@Autowired
+	private EmployeeRepository employee_repo;
+	
+	// get all employee
+	@GetMapping("/employees")
+	public List<Employee> getAllEmployees(){
+		return employee_repo.findAll();
+	}
+	
+}
+
+```
 
 ### Linux & BSD
 
