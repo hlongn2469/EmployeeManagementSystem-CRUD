@@ -4,7 +4,7 @@ This report will document the approach to create a full stack web application fo
 
 ## Architecture overview
 
-![EMS-architecture drawio](https://user-images.githubusercontent.com/78957509/170805013-728932de-93e6-41ac-8ed4-bec02694cecb.png)
+![image](https://user-images.githubusercontent.com/78957509/170812097-3c55401c-5e88-4bc9-baed-507911f48898.png)
 
 Angular app contains templates which render the single page web displaying to clients. The templates are associated with components which contain HTML templates that declares what renders on the page, a TypeScript class that defines behavior, and a CSS selector that defines how the component is used in a template. The services are responsible for communicating with Spring Boot Controller via HTTP. 
 
