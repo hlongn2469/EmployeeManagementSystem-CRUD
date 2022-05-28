@@ -367,43 +367,65 @@ Includes Angular server in the EmployeeController.java
 ```
 @CrossOrigin(origins = "http://localhost:4200")
 ```
-Result:
+##### 8) Result:
 ![image](https://user-images.githubusercontent.com/78957509/170810579-553c0484-c6b0-49fb-96f6-b287f97e19ef.png)
 
+### Routing and Navigation in Angular 
+##### 1) Route /employees path to employee-list component in app-routing-module.ts
+##### 2) Redirect http://localhost:4200 to http://localhost:4200/employees in app-routing-module.ts
+```
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
 
+const routes: Routes = [
+  {path: 'employees', component: EmployeeListComponent},
+  {path: '', redirectTo: "employees", pathMatch: "full"}
+];
 
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
 
+##### 3) Add [routeroutlet](https://angular.io/api/router/RouterOutlet) in app.component.html
+##### 4) Add navigation to Employee List text so when the user clicks the text, they will navigate to /employees path in app.component.html
+##### 5) Add simple footer in app.component.html
+```
+<nav class = "navbar navbar-expand-sm bg-primary navbar-dark">
+    <ul class = "navbar-nav">
+        <li class = "nav-item">
+            <a routerLink = "employees" routerLinkActive = "active" class = "nav-link" > Employee List</a>
+        </li>
+    </ul>
+</nav>
+<h1 class = "text-center"> {{title}}</h1>
+<div class = "container">
+    <router-outlet></router-outlet>
+</div>
+<footer class = "footer"> 
+    <div class = "container">
+        <span> Recreated by Kray Nguyen. All rights reserve to Java Guides </span>
+    </div>
+</footer>
+```
 
+##### 6) design footer attributes as we desire in styles.css
+```
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.min.css";
 
-
-| Install:            | Upgrade:            |
-| ------------------- | --------------------|
-| `winget install --id GitHub.cli` | `winget upgrade --id GitHub.cli` |
-
-#### scoop
-
-| Install:           | Upgrade:           |
-| ------------------ | ------------------ |
-| `scoop install gh` | `scoop update gh`  |
-
-#### Chocolatey
-
-| Install:           | Upgrade:           |
-| ------------------ | ------------------ |
-| `choco install gh` | `choco upgrade gh` |
-
-#### Signed MSI
-
-MSI installers are available for download on the [releases page][].
-
-### GitHub Actions
-
-GitHub CLI comes pre-installed in all [GitHub-Hosted Runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners).
-
-### Other platforms
-
-Download packaged binaries from the [releases page][].
-
-### Build from source
-
-See here on how to [build GitHub CLI from source][build from source].
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background-color: red;
+    text-align: center;
+    color:white;
+}
+```
+##### 7) Result:
+![image](https://user-images.githubusercontent.com/78957509/170811121-59fe0a45-d07a-4096-ae88-f3352e2bbe71.png)
