@@ -10,14 +10,19 @@ Angular app contains templates which render the single page web displaying to cl
 
 Spring Boot app contains the controller which routes to a desired function based on given URI path. Spring data JPA defines repository interfaces which simply performs CRUD operation, sorting, and pagination on MYSQL database 
 
+[See the manual][manual] for setup and usage instructions
 
-## Contributing
+## Technology and versioning
 
-[See the manual][manual] for setup and usage instructions.
+| Front-end         | Back-end                   |
+| ----------------- | -----------------          |
+| Angular 10        | Spring Boot 2.7.0          |
+| TypeScript        | Java SE 17                 |
+| NodeJS 14.7       | Maven 3.2+                 |
+| NPM 8.0+          | Embedded Tomcat            |
+| VSCode 1.6+       | MySQL Database (Workbench) |
+| BootStrap 4       |                            |
 
-If anything feels off, or if you feel that some functionality is missing, please check out the [contributing page][contributing]. There you will find instructions for sharing your feedback, building the tool locally, and submitting pull requests to the project.
-
-<!-- this anchor is linked to from elsewhere, so avoid renaming it -->
 ## Installation
 
 ### macOS
