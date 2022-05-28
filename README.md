@@ -163,7 +163,7 @@ public class ResourceNotFoundException extends RuntimeException {
 }
 ```
 
-### Create Rest Controller - Spring (EmployeeController.java)
+### Create Rest Controller for listing employees API (EmployeeController.java)
 
 ##### 1) Annotate @RestController and @RequestMapping (endpoint of the main controller)
 ##### 2) Autowired repository entity
@@ -204,17 +204,177 @@ public class EmployeeController {
 
 ```
 
-### Linux & BSD
+### Run Spring Boot app and test response with Postman
 
-`gh` is available via [Homebrew](#homebrew), [Conda](#conda), [Spack](#spack), and as downloadable binaries from the [releases page][].
+Add some metadata to MYSQL workbench before testing the endpoint so you see data being returned
 
-For instructions on specific distributions and package managers, see [Linux & BSD installation](./docs/install_linux.md).
+![image](https://user-images.githubusercontent.com/78957509/170807527-b3123121-4988-4608-8c26-0588ee1e5950.png)
 
-### Windows
+### Create Angular App
 
-`gh` is available via [WinGet][], [scoop][], [Chocolatey][], [Conda](#conda), and as downloadable MSI.
+##### 1) Prereqs: Install Node and npm 
+##### 2) Follow terminal instructions on [AngularCLI](https://angular.io/cli)
+```
+$ npm install -g @angular/cli
+```
+##### 3) Create new angular folder project and run the server
+```
+ng new my-first-project
+cd my-first-project
+ng serve
+```
 
-#### WinGet
+### Add Bootstrap 4 in Angular
+
+Bootstrap allows CSS styling in HTML files. import Bootstrap inside style.css like below:
+```
+@import "~bootstrap/dist/css/bootstrap.min.css";
+```
+### Create Angular Components for listing employees
+App component will route to specific component (we need to specify in app.component.ts) which will call its corresponding services
+
+##### 1) Create Typescript class for Employee to hold response data (Employee.ts)
+```
+$ ng g class employee
+```
+Then add Employee atrributes similar to Employee Model in Spring Boot
+```
+export class Employee {
+    id!: number;
+    first_name!: string;
+    last_name!: string;
+    email_id!: string;
+}
+
+```
+##### 2) Generate list employee component via ng
+```
+$ ng g c employee-list
+```
+##### 3) Provides a html template code for Employee component 
+```
+<h2>Employee List</h2>
+<table class = "table table-striped">
+    <thead>
+        <tr>
+            <th> First Name</th>
+            <th> Last Name </th>
+            <th> email Id </th>
+        </tr>
+    </thead>
+
+    <tbody>
+    	// loop over each employee inside employee array per table row 
+        <tr *ngFor = "let employee of employees"> 
+            <td> {{employee.first_name}}</td>
+            <td> {{employee.last_name}}</td>
+            <td> {{employee.email_id}}</td>
+        </tr>
+    </tbody>
+</table>
+```
+##### 4) Initialize Employee array instance in employee-list.components.ts
+```
+employees!: Employee[];
+```
+
+### Connect Angular with List Employee Rest API via HTTPClient
+##### 1) Generate employee service via ng
+The employee service is responsible for communicating with Rest APIs in Spring Boot/Tomcat server
+```
+ng g s employee
+```
+##### 2) Import HTTPClient in app.module.ts
+```
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http'
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    EmployeeListComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+##### 3) Dependency Inject HTTPClient in employee.service.ts
+##### 4) define base URL to establish request to in employee.service.ts
+##### 5) Create a getEmployeesList method that returns observerable type of employee list in employee.service.ts
+```
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
+import { Observable } from 'rxjs';
+import { Employee } from './employee';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EmployeeService {
+
+  private baseURL = "http://localhost:8080/api/v1/employees";
+
+  constructor(private httpClient: HttpClient) { }
+  
+  getEmployeesList(): Observable<Employee[]>{
+    return this.httpClient.get<Employee[]>(`${this.baseURL}`);
+  }
+}
+```
+##### 6) Dependency Injected Employee Service in employee-list.component.ts
+##### 7) Create a method to get employees via asynchronous call to employee service
+```
+import { Component, OnInit } from '@angular/core';
+import {Employee} from '../employee'
+import { EmployeeService } from '../employee.service';
+
+@Component({
+  selector: 'app-employee-list',
+  templateUrl: './employee-list.component.html',
+  styleUrls: ['./employee-list.component.css']
+})
+export class EmployeeListComponent implements OnInit {
+
+  employees!: Employee[];
+
+  constructor(private employeeService: EmployeeService) { }
+
+  ngOnInit(): void {
+    this.getEmployees();
+  }
+
+  private getEmployees(){
+    this.employeeService.getEmployeesList().subscribe(data => {
+      this.employees = data;
+    });
+  }
+
+}
+
+```
+##### 7) Connect Angular to Spring Boot
+Includes Angular server in the EmployeeController.java 
+```
+@CrossOrigin(origins = "http://localhost:4200")
+```
+Result:
+![image](https://user-images.githubusercontent.com/78957509/170810579-553c0484-c6b0-49fb-96f6-b287f97e19ef.png)
+
+
+
+
+
+
 
 | Install:            | Upgrade:            |
 | ------------------- | --------------------|
@@ -247,5 +407,3 @@ Download packaged binaries from the [releases page][].
 ### Build from source
 
 See here on how to [build GitHub CLI from source][build from source].
-
-##### 1) Create a new Rails app:
