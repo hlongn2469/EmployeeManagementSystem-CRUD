@@ -40,7 +40,7 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDial
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-## development instructions
+## Detail instructions on creating the app (dev)
 
 ### Create JPA Entity (Employee.java)
 Employee is an entity which will be persisted in MYSQL database. Create a package named "model" under src/main/java. Under model package, create a new Employee model class like below:
