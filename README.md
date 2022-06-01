@@ -430,3 +430,54 @@ export class AppRoutingModule { }
 ```
 ##### 7) Result:
 ![image](https://user-images.githubusercontent.com/78957509/170811121-59fe0a45-d07a-4096-ae88-f3352e2bbe71.png)
+
+### Create Employee Rest API
+##### 1) Initiate CreateEmployee method in EmployeeController.java taking in an Employee entity from client using @RequestBody annotation
+##### 2) Use @PostMapping annotation to create endpoint for user to perform create employee
+```
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.model.Employee;
+import com.example.demo.repository.EmployeeRepository;
+
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
+@RequestMapping("/api/v1/")
+public class EmployeeController {
+	
+	@Autowired
+	private EmployeeRepository employee_repo;
+	
+	// get all employee
+	@GetMapping("/employees")
+	public List<Employee> getAllEmployees(){
+		return employee_repo.findAll();
+	}
+	
+	// create employees
+	@PostMapping("/employees")
+	public Employee createEmployee(@RequestBody Employee employee) {
+		return employee_repo.save(employee);
+	}
+	
+}
+```
+##### 3) Test the above function with Post HTTP providing the employee (.json) via Postman
+##### 4) Result 
+![Screenshot 2022-05-31 173759](https://user-images.githubusercontent.com/78957509/171305516-dc2fbb7a-96fc-4632-b203-5abb327aba4a.png)
+
+
+
+
+
+
