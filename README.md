@@ -605,6 +605,60 @@ export class AppModule { }
 ##### 7) Test the submit form with web console
 ![image](https://user-images.githubusercontent.com/78957509/171310095-1e0855f0-3c34-47ea-894a-d065bf3309dc.png)
 
+### Connect Angular to createEmployee Rest API in Spring Boot
+##### 1) Create a service method to HTTP post request to createEmployee API in employee.service.ts
+```
+createEmployee(employee: Employee): Observable<Object>{
+    return this.httpClient.post(`${this.baseURL}`,employee);
+}
+```
+##### 2) Dependency Inject employeeService and router instance in create-employee.component.ts
+##### 3) Create a saveEmployee() method to call the employee service method and call goToEmployeeList() method to redirect client to employee listing route in create-employee.component.ts
+##### 4) Create goToEmployeeList() method to allow the client to route to after successfully create the Employee instance in create-employee.component.ts
+##### 5) Call saveEmployee() method inside onSubmit() method in create-employee.component.ts
+```
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Employee } from '../employee';
+import { EmployeeService } from '../employee.service';
+
+@Component({
+  selector: 'app-create-employee',
+  templateUrl: './create-employee.component.html',
+  styleUrls: ['./create-employee.component.css']
+})
+export class CreateEmployeeComponent implements OnInit {
+  employee: Employee = new Employee();
+
+  constructor(private employeeService: EmployeeService,
+    private router: Router ) { }
+
+  saveEmployee(){
+    this.employeeService.createEmployee(this.employee).subscribe(data =>{
+      console.log(data);
+      this.goToEmployeeList();
+    },
+    error => console.log(error));
+  }
+
+  goToEmployeeList(){
+    this.router.navigate(['/employees'])
+  }
+
+  ngOnInit(): void {
+  }
+
+  onSubmit(){
+    console.log(this.employee);
+    this.saveEmployee();
+  }
+
+}
+```
+##### 6) Test submit operation in Angular server
+
+
+
 
 
 
