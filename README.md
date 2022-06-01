@@ -657,12 +657,46 @@ export class CreateEmployeeComponent implements OnInit {
 ```
 ##### 6) Test submit operation in Angular server
 
+### Create GetEmployeeByID Rest API - Spring
+##### 1) Initiate getEmployee method in EmployeeController.java taking in @Path variable long id that returns a ResponseEntity type of Employee
+##### 2) Use @PostMapping annotation to create endpoint for user to look up employee by id
+##### 3) Use employee repository instance to call findByID() method. If failed, route to exception to display to client
+```
+@GetMapping("/employees/{id}")
+	public ResponseEntity<Employee> getEmployeeByID(@PathVariable Long id) {
+		Employee employee = employee_repo.findById(id).
+				orElseThrow(()-> new ResourceNotFoundException("Employee resource not found: " + id));
+		return ResponseEntity.ok(employee);
+	}
+```
+##### 3) Test response using Postman
+![image](https://user-images.githubusercontent.com/78957509/171315378-838fc620-1643-4a7e-9b2e-95b0202fd680.png)
 
+### Create updateEmployee Rest API - Spring
+##### 1) Initiate updateEmployee() method in EmployeeController.java taking in @Path variable long id and an Employee instance that returns a ResponseEntity type of Employee
+##### 2) Use @PutMapping annotation to create endpoint for user to update employee by id
+##### 3) Get employee instance by ID(instance retreived from db) and set that instance attributes (via setters) to the desired attributes provided by client (via getter)
+##### 4) Save the updated employee to the database 
+```
+@PutMapping("employees/{id}")
+	public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employee_details) {
+		Employee employee = employee_repo.findById(id).
+				orElseThrow(()-> new ResourceNotFoundException("Employee resource not found: " + id));
+		employee.setFirst_name(employee_details.getFirst_name());
+		employee.setLast_name(employee_details.getLast_name());
+		employee.setEmail_id(employee_details.getEmail_id());
+		employee.setDepartment(employee_details.getDepartment());
+		employee.setTitle(employee_details.getTitle());
+		
+		Employee updated_employee = employee_repo.save(employee);
+		return ResponseEntity.ok(updated_employee);
+		
+	}
+```
+##### 4) Test via Postman using Put Method 
+![Screenshot 2022-05-31 195437](https://user-images.githubusercontent.com/78957509/171318586-a791f75b-ba93-4e07-98cd-045432f4fd54.png)
 
-
-
-
-
+### Connect Angular to updateEmployee Rest API in Spring Boot
 
 
 
