@@ -474,7 +474,144 @@ public class EmployeeController {
 ```
 ##### 3) Test the above function with Post HTTP providing the employee (.json) via Postman
 ##### 4) Result 
-![Screenshot 2022-05-31 173759](https://user-images.githubusercontent.com/78957509/171305516-dc2fbb7a-96fc-4632-b203-5abb327aba4a.png)
+200 OK response means the new employee is created in the database. You can go to angular web server to double check the newly created employee as well.
+![Screenshot 2022-05-31 173759](https://user-images.githubusercontent.com/78957509/171305598-cfe698e3-74a8-4174-9926-224cf3f9f12b.png)
+
+### Create Angular CreateEmployee Component
+For create operation, we use two-way binding to listen for events and update values simultaneously between parent and child components. Property binding sets a specific element property whereas event binding	listens for an element change event.
+
+##### 1) Initiate create-employee component 
+```
+ng g c create-employee
+```
+##### 2) Configure pathing route in app-routing.module.ts
+```
+const routes: Routes = [
+  {path: 'employees', component: EmployeeListComponent},
+  {path: 'create-employee', component: CreateEmployeeComponent},
+  {path: '', redirectTo: "employees", pathMatch: "full"}
+];
+```
+##### 3) Configure a router link for create employeee in app-component.html
+```
+<nav class = "navbar navbar-expand-sm bg-primary navbar-dark">
+    <ul class = "navbar-nav">
+        <li class = "nav-item">
+            <a routerLink = "employees" routerLinkActive = "active" class = "nav-link" > Employee List</a>
+        </li>
+        <li class = "nav-item">
+            <a routerLink = "create-employee" routerLinkActive = "active" class = "nav-link" > Add Employee</a>
+        </li>
+    </ul>
+</nav>
+```
+### Form handling for create employee component - Angular
+##### 1) Initiate new employee instance in create-employee.component.ts
+##### 2) Create Onsubmit() method 
+```
+import { Component, OnInit } from '@angular/core';
+import { Employee } from '../employee';
+
+@Component({
+  selector: 'app-create-employee',
+  templateUrl: './create-employee.component.html',
+  styleUrls: ['./create-employee.component.css']
+})
+export class CreateEmployeeComponent implements OnInit {
+  employee: Employee = new Employee();
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+  onSubmit(){
+  console.log(this.employee);
+  }
+
+}
+```
+##### 3) Design HTML form in create-employee.component.html (form with Employee attributes + submit button)
+##### 4) Create an event handler for event biding when data is submitted to the form using ngSubmit
+##### 5) Use NgModel for property binding 
+```
+<div class = "col-md-6 offset-md-3">
+    <h3> Create Employee </h3>
+    <form (ngSubmit) = "onSubmit()">
+        <div class = "form-group">
+            <label>First Name</label>
+            <input type = "text" class = "form-control" id = "first_name"
+                [(ngModel)] = "employee.first_name" name = "first_name">
+        </div>
+
+        <div class = "form-group">
+            <label>Last Name</label>
+            <input type = "text" class = "form-control" id = "last_name"
+                [(ngModel)] = "employee.last_name" name = "last_name">
+        </div>
+
+        <div class = "form-group">
+            <label>Email ID</label>
+            <input type = "text" class = "form-control" id = "email_id"
+                [(ngModel)] = "employee.email_id" name = "email_id">
+        </div>
+
+        <div class = "form-group">
+            <label>Depatment</label>
+            <input type = "text" class = "form-control" id = "department"
+                [(ngModel)] = "employee.department" name = "department">
+        </div>
+
+        <div class = "form-group">
+            <label>Title</label>
+            <input type = "text" class = "form-control" id = "title"
+                [(ngModel)] = "employee.title" name = "title">
+        </div>
+
+        <button class = "btn btn-success" type = "submit">Submit</button>
+	<br>
+    </form>
+</div>
+
+```
+##### 6) import form module into app.module.ts
+```
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http'
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { CreateEmployeeComponent } from './create-employee/create-employee.component';
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    EmployeeListComponent,
+    CreateEmployeeComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+##### 7) Test the submit form with web console
+![image](https://user-images.githubusercontent.com/78957509/171310095-1e0855f0-3c34-47ea-894a-d065bf3309dc.png)
+
+
+
+
+
+
+
+
 
 
 
