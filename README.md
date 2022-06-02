@@ -22,7 +22,7 @@ Spring Boot app contains the controller which routes to a desired function based
 | VSCode 1.6+       | MySQL Database (Workbench) |
 | BootStrap 4       | Eclipse STS 4.4+           |
 
-## Setup
+## I) Setup Spring and MySql
 
 ### Initialize Spring Starter project in Eclipse STS
 
@@ -163,6 +163,7 @@ public class ResourceNotFoundException extends RuntimeException {
 	}
 }
 ```
+## II) Create rest API for listing employee and connect the API to Angular
 
 ### Create Rest Controller for listing employees API (EmployeeController.java)
 
@@ -431,6 +432,8 @@ export class AppRoutingModule { }
 ##### 7) Result:
 ![image](https://user-images.githubusercontent.com/78957509/170811121-59fe0a45-d07a-4096-ae88-f3352e2bbe71.png)
 
+## III) Create rest API for creating an employee and connect the API to Angular
+
 ### Create createEmployee Rest API
 ##### 1) Initiate CreateEmployee method in EmployeeController.java taking in an Employee entity from client using @RequestBody annotation
 ##### 2) Use @PostMapping annotation to create endpoint for user to perform create employee
@@ -657,6 +660,8 @@ export class CreateEmployeeComponent implements OnInit {
 ```
 ##### 6) Test submit operation in Angular server
 
+## IV) Create rest API for updating an employee and connect the API to Angular
+
 ### Create GetEmployeeByID Rest API - Spring
 ##### 1) Initiate getEmployee method in EmployeeController.java taking in @Path variable long id that returns a ResponseEntity type of Employee
 ##### 2) Use @PostMapping annotation to create endpoint for user to look up employee by id
@@ -728,6 +733,7 @@ goToEmployeeList(){
     this.router.navigate(['/employees'])
     }
 ```
+## V) Create rest API for updating an employee and connect the API to Angular
 
 ### Create deleteEmployee Rest API
 ##### 1) Initiate deleteEmployee method in EmployeeController.java taking in an employee id from client using @PathVariable annotation
@@ -772,7 +778,15 @@ deleteEmployee(id: number){
 ```
 ##### 4) Test result on Angular Server
 
-
+## VI) Conclusion
+Key points that we have achieved:
+##### 1) Set up Spring and Angular project
+##### 2) Configure MySQL to communicate with Spring (Spring data JPA - Hibernate)
+##### 3) Create rest API for listing employees in Spring and connect the API to Angular
+##### 4) Create rest API for creating an employee in Spring and connect the API to Angular
+##### 5) Create rest API for updating an employee in Spring and connect the API to Angular
+##### 6) Create rest API for deleting an employee in Spring and connect the API to Angular
+##### 7) Testing interfaces via Angular server and REST APIs via Postman Client
 
 
 
