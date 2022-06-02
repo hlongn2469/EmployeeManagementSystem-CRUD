@@ -431,7 +431,7 @@ export class AppRoutingModule { }
 ##### 7) Result:
 ![image](https://user-images.githubusercontent.com/78957509/170811121-59fe0a45-d07a-4096-ae88-f3352e2bbe71.png)
 
-### Create Employee Rest API
+### Create createEmployee Rest API
 ##### 1) Initiate CreateEmployee method in EmployeeController.java taking in an Employee entity from client using @RequestBody annotation
 ##### 2) Use @PostMapping annotation to create endpoint for user to perform create employee
 ```
@@ -697,6 +697,80 @@ export class CreateEmployeeComponent implements OnInit {
 ![Screenshot 2022-05-31 195437](https://user-images.githubusercontent.com/78957509/171318586-a791f75b-ba93-4e07-98cd-045432f4fd54.png)
 
 ### Connect Angular to updateEmployee Rest API in Spring Boot
+##### 1) Create a service method to HTTP put request to updateEmployee API in employee.service.ts
+```
+updateEmployee(id: number, employee: Employee): Observable<Object>{
+    return this.httpClient.put(`${this.baseURL}/${id}`, employee);
+  }
+```
+##### 2) Dependency Inject employeeService, router, and activated route instance in create-employee.component.ts
+##### 3) Use activated route to inject path parameter and assign local instance in update-employee.component.ts
+```
+ngOnInit(): void {
+    this.id = this.route.snapshot.params['id'];
+    this.employeeService.getEmployeeByID(this.id).subscribe(data => {
+      this.employee = data;
+    },
+    error => console.log(error));
+  }
+```
+##### 3) Create onSubmit() that calls update employee service when client click the button 
+##### 4) Create goToEmployeeList() that allows client to go back to employee listing view after sucessfully update
+```
+onSubmit(){
+    this.employeeService.updateEmployee(this.id, this.employee).subscribe(data =>{
+      console.log(data);
+      this.goToEmployeeList();
+    }, error => console.log(error));
+  }
+  
+goToEmployeeList(){
+    this.router.navigate(['/employees'])
+    }
+```
+
+### Create deleteEmployee Rest API
+##### 1) Initiate deleteEmployee method in EmployeeController.java taking in an employee id from client using @PathVariable annotation
+##### 2) Use @DeleteMapping annotation to create endpoint for user to perform delete employee
+##### 3) Use repository instance to retreive the employee instance by their id 
+##### 4) Use repository instance to delete the retrieved employee instance from the database
+##### 5) Return ok response
+
+```
+@DeleteMapping("employees/{id}")
+	public ResponseEntity<Map<String, Boolean>> deleteEmployee(@PathVariable Long id){
+		Employee employee = employee_repo.findById(id).
+				orElseThrow(()-> new ResourceNotFoundException("Employee resource not found: " + id));
+		employee_repo.delete(employee);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", true);
+		return ResponseEntity.ok(response);
+	}
+```
+### Connect Angular to deleteEmployee Rest API in Spring Boot
+##### 1) Create a service method to HTTP delete request to deleteEmployee API in employee.service.ts
+```
+deleteEmployee(id: number): Observable<Object>{
+    return this.httpClient.delete(`${this.baseURL}/${id}`);
+  }
+```
+##### 2) create deleteEmployee() that initiate employee service to deleteEmployee() in employee-list.component.ts
+```
+deleteEmployee(id: number){
+    this.employeeService.deleteEmployee(id).subscribe(data => {
+      console.log(data);
+      this.getEmployees();
+    })
+  }
+```
+##### 3) Add a delete button that calls deleteEmployee() in employee-list.component.html
+```
+<td>
+      <button (click) = "updateEmployee(employee.id)" class = "btn btn-info"> Update</button>
+      <button (click) = "deleteEmployee(employee.id)" class = "btn btn-danger" style = "margin-left: 1em"> Delete </button>
+</td>
+```
+##### 4) Test result on Angular Server
 
 
 
