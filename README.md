@@ -1,6 +1,16 @@
 # EmployeeManagementSystem-CRUD
 
-This report will document the approach to create a full stack web application for the Employee Management System (EMS) using Spring Boot and Angular
+This report will document the approach to create a full stack web application for the Employee Management System (EMS) using Spring Boot and Angular which allows end user to perform CRUD operations.
+
+## End-user expectation
+### 1) Read all employees
+https://user-images.githubusercontent.com/78957509/171724772-c35365ce-6018-4fcf-8978-b3b06a7e6896.mp4
+### 2) Create a new employee
+https://user-images.githubusercontent.com/78957509/171724862-5f6a5e64-0762-49ef-b9de-124ae50c113d.mp4
+### 3) Update an existing employee
+https://user-images.githubusercontent.com/78957509/171724887-686a39ef-da92-4b47-ab4f-272ad023996c.mp4
+### 4) Delete an existing employee
+https://user-images.githubusercontent.com/78957509/171724906-bc702522-420d-41d5-ab11-790d3a1c015f.mp4
 
 ## Architecture overview
 
