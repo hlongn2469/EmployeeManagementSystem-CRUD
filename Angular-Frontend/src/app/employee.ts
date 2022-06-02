@@ -3,4 +3,6 @@ export class Employee {
     first_name!: string;
     last_name!: string;
     email_id!: string;
+    department!: string;
+    title!: string;
 }
